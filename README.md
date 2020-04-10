@@ -95,8 +95,8 @@ Adding our scaled data revelead a high variance with the increase in test R2 sco
 
 
 #### Sources
-<br> -[Source: Features to Boost Home Value](#https://www.realtor.com/news/trends/top-15-home-features-to-boost-your-homes-value-and-sell-it-faster/)
-<br> -[Source: Features Buyers Want](#https://www.kiplinger.com/slideshow/real-estate/T010-S001-home-features-today-s-buyers-want-most/index.html)
-<br> -[Source: Remodeling Costs vs Sale](#https://www.remodeling.hw.net/cost-vs-value/2019/west-north-central/)
-<br> -[Source: HoA Window Regulations](#https://ringerwindows.com/residential-windows-hoa-programs/)
-<br> -[Scource: Typical Home Owner](#https://www.zillow.com/report/2017/homeowners/typical-american-homeowner/)
+<br> -[Source: Features to Boost Home Value](https://www.realtor.com/news/trends/top-15-home-features-to-boost-your-homes-value-and-sell-it-faster/)
+<br> -[Source: Features Buyers Want](https://www.kiplinger.com/slideshow/real-estate/T010-S001-home-features-today-s-buyers-want-most/index.html)
+<br> -[Source: Remodeling Costs vs Sale](https://www.remodeling.hw.net/cost-vs-value/2019/west-north-central/)
+<br> -[Source: HoA Window Regulations](https://ringerwindows.com/residential-windows-hoa-programs/)
+<br> -[Scource: Typical Home Owner](https://www.zillow.com/report/2017/homeowners/typical-american-homeowner/)
