@@ -1,183 +1,102 @@
-# Project 2 - Ames Housing Data and Kaggle Challenge
+#### Contents:
+- [Problem Statement](#Problem-Statement)
+- [Executive Summary](#Executive-Summary)
+- [Data Dictionary](#Data-Dictionary)
+- [Conclusions and Recommendations](#Conclusions-and-Recommendations)
+- [Model Score Summaries](#Model-Score-Summaries)
+- [Sources](#Sources)
 
-Welcome to Project 2! It's time to start modeling.
+#### Problem Statement
+Given the dataset from Kaggle's challenge: [Ames Housing Dataset](#https://www.kaggle.com/c/dsi-us-11-project-2-regression-challenge/overview), we were tasked with testing and identifying house-features best suited for estimating a house price. Our overall recommendations will err more on advisement side of prioritizing house features as opposed to expecting house price.
+<br> <br><t>HoA is suffering because home-owner negligence is driving property value down. Complaints received identified that the HoA's home-value assessments are unfounded thus home-owners are no longer following HoA policies.
+<br><br>
+The problem we identify here: what can we do to improve our neighborhood's home values during a time of low HoA approval and regulation following.
+<br>
+We will look at individual feature sets and use regression model scoring to identify influentifial home features. Then we'll compare this with external research to identify best recommendations with influence to improving home price.
 
-**Primary Learning Objectives:**
-1. Creating and iteratively refining a regression model
-2. Using [Kaggle](https://www.kaggle.com/) to practice the modeling process
-3. Providing business insights through reporting and presentation.
+#### Executive Summary
+Our models showed our single numerical categories to give us the best consistent regression scoring (R2, MRSE, CrossVal). These consisted mostly of room related scorings and quantities. While our Numerical Category Regression model averaged a score of approximately 74% variability explained, it swung a large Root Mean Squared Error of close to 40,000. <br> <br>
+Understanding this we can use the numerical R scoring and investigate its correlation to sale price, then find home projects that fall within the individual average home owner's finance. <br> <br> External research confirms we have several means to take wihtin our own personal homes for value improvement as well as legal means to pursue enforcement of architechtural upgrades.
 
-You are tasked with creating a regression model based on the Ames Housing Dataset. This model will predict the price of a house at sale.
+#### Data Dictionary
+[Ames Dataset Data Dictionary](#https://www.kaggle.com/c/dsi-us-11-project-2-regression-challenge/data)
 
-The Ames Housing Dataset is an exceptionally detailed and robust dataset with over 70 columns of different features relating to houses.
+|name|type|description|
+|:--|---|--:|
+|`testdf` | DataFrame | testing data frame after imputing and/or deleting nan's during cleaning|
+| `train` | DataFrame | testing dataframe after imputing and/or deleting nan's during cleaning|
+| `testog` | DataFrame | unfiltered, unmodified dataframe for reference|
+| `dfv1` | DataFrame | categorical training dataframe|
+| `testv1` | DataFrame | categorical testing dataframe|
+| `subf#` | DataFrame | dataframe assignment for exporting to csv in Kaggle's requested format|
+| `testnm` | DataFrame | numerical test set |
+| `numtrain` | DataFrame | numerical train set|
+| `testsq` | DataFrame | scaled numerical features formatted from our test dataset|
+| `sqtrain` | DataFrame | scaled numerical features formatted from o ur train set|
+| `features` | List | Categorical features selected to apply to `train` set.|
+| `traincols` | List | Categorical training set includes `'price'` amd `'id'`|
+| `testcols` | List | Categorical `test` set that includes and `'id'`|
+| `num_feats` | List | Numerical feature set for our `train` dataframe includes `'SalePrice'` and `'Id'`|
+| `tnum_feats` | List | Numerical feature set for our `test` dataframe includes `'id'`|
+| `sq_feats` | List | Scalable Numeral feature set for our `train` dataframe includes `'SalePrice'` and `'Id'`|
+| `tsq_feats` | List | Scalable Numeral feature set for our `test` dataframe includes `'id'`|
+| `X, y, and variants` List | DataFrame, Series | These are our regression feature and variable assignments. code blocks will contain descriptions of each.|
+| `preds, trainpreds, etc.` List | Series | these are our y_prediction variables established from our model.|
+| `tempcols` | list | comprehension for building neighborhood list to compare against test |
+| `tempcols2` | list | comprehension for building neighborhood list to compare against train|
 
-Secondly, we are hosting a competition on Kaggle to give you the opportunity to practice the following skills:
+#### Conclusions and Recommendations
+Currently our model is better suited for finding correlating features rather than predict price. The features we've worked with have been documented and cleaned so we can continue assessing trends and use external data to align with features we deem valuable. <br><br>
 
-- Refining models over time
-- Use of train-test split, cross-validation, and data with unknown values for the target to simulate the modeling process
-- The use of Kaggle as a place to practice data science
+While we can maintain our current HoA regulations, our model does help us find features we can investigate on improving or adding to our own houses, increasing their individual value. <br><br>
 
-As always, you will be submitting a technical report and a presentation. **You may find that the best model for Kaggle is not the best model to address your data science problem.**
+If we'd like to pursue tightening down on regulations, windows can fall under architectural replacement with the right authorizations. However, this would be costly to us and the community as a whole. As windows are trendy, we can take advantage of recyclable material trend and take installation costs down by finding a specialist from within our community network.
 
-## Set-up
+#### Model  Score Summaries:
 
-Before you begin working on this project, please do the following:
+##### Categorical Score Summary
+- `train R2 score`: 0.6578429575225204
+- `test R2 score`: 0.5762651698596276
+- `cross val score`: 0.6163932809393643
+- `R2 Score (without split)`: 0.6455431466231798
+- `RMSE Train/Split score`: 46848.294477176525
+- `RMSE on full features`: 47592.55017675726
 
-1. Sign up for an account on [Kaggle](https://www.kaggle.com/)
-2. **IMPORTANT**: Click this link ([Regression Challenge Sign Up](https://www.kaggle.com/t/2dde5663e03b4165b853ff65e723c26d)) to **join** the competition (otherwise you will not be able to make submissions!)
-3. Review the material on the [DSI-US-11 Regression Challenge](https://www.kaggle.com/c/dsi-us-11-project-2-regression-challenge)
-4. Review the [data description](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt).
+##### Conclusions:
+Our training set is definitely overfit, with the cross val and test scores showing .03-.04 difference implies our model has higher variance (test and crossval lower than our training score).
 
-## The Modeling Process
+We will proceed to now test numerical features.
 
-1. The train dataset has all of the columns that you will need to generate and refine your models. The test dataset has all of those columns except for the target that you are trying to predict in your Regression model.
-2. Generate your regression model using the training data. We expect that within this process, you'll be making use of:
-    - train-test split
-    - cross-validation / grid searching for hyperparameters
-    - strong exploratory data analysis to question correlation and relationship across predictive variables
-    - code that reproducibly and consistently applies feature transformation (such as the preprocessing library)
-3. Predict the values for your target column in the test dataset and submit your predictions to Kaggle to see how your model does against unknown data.
-    - **Note**: Kaggle expects to see your submissions in a specific format. Check the challenge's page to make sure you are formatting your CSVs correctly!
-    - **You are limited to models you've learned in class**. In other words, you cannot use XGBoost, Neural Networks or any other advanced model for this project.
-4. Evaluate your models!
-    - consider your evaluation metrics
-    - consider your baseline score
-    - how can your model be used for inference?
-    - why do you believe your model will generalize to new data?
+##### Numercal Score Summary
+- `train R2 score`: 0.7553817990521428
+- `test R2 score`: 0.7636609305004238
+- `cross val score`: 0.7464907120547879
+- `R2 Score (without split)`: 0.7576575430618783
+- `RMSE Train/Split score`: 38611.440491748916
+- `RMSE on full features`: 39003.28692496293
 
-## Submission
+##### Conclusions:
+Numerical columns definitely had a stronger R2 score, the change in test r2 vs cross-val(cv) implies we may be underfit, but with low variance. It's certainly our better model so far
 
-Materials must be submitted by the beginning of class on **Friday, April 10**.
 
-The last day for the Kaggle competition will be **Friday, April 10**.
+###### Scaled Score Summary
+- `train R2 score`: 0.6723902525839343
+- `test R2 score`: 0.7294544670268371
+- `cross val score`: 0.634384215358273
+- `R2 Score (without split)`: 0.6887855968651643
+- `RMSE Train/Split score`: 44683.792650829135
+- `RMSE on full features`: 44338.90383859943
 
-Your technical report will be hosted on Github Enterprise. Make sure it includes:
 
-- A README.md (that isn't this file)
-- Jupyter notebook(s) with your analysis and models (renamed to describe your project)
-- At least one successful prediction submission on [DSI-US-11 Regression Challenge](https://www.kaggle.com/c/dsi-us-11-project-2-regression-challenge) --  you should see your name in the "[Leaderboard](https://www.kaggle.com/c/dsi-us-11-project-2-regression-challenge/leaderboard)" tab.
-- Data files
-- Presentation slides
-- Any other necessary files (images, etc.)
+#### Conclusions:
+Adding our scaled data revelead a high variance with the increase in test R2 score. CV scoring implies there may have been some data imbalance with train/split.
+<br><br> Our overal r2 sits at a lower .67 with RMSE rising higher than the numericals.
 
-**Check with your local instructor for how they would like you to submit your repo for review.**
 
----
 
-## Presentation Structure
-
-- **Must be within time limit established by local instructor.**
-- Use Google Slides or some other visual aid (Keynote, Powerpoint, etc).
-- Consider the audience. **Check with your local instructor for direction**.
-- Start with the **data science problem**.
-- Use visuals that are appropriately scaled and interpretable.
-- Talk about your procedure/methodology (high level).
-- Talk about your primary findings.
-- Make sure you provide **clear recommendations** that follow logically from your analyses and narrative and answer your data science problem.
-
-Be sure to rehearse and time your presentation before class.
-
----
-
-## Rubric
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-**Scores will be out of 27 points based on the 9 items in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
-
-### The Data Science Process
-
-**Problem Statement**
-- Is it clear what the student plans to do?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Cleaning and EDA**
-- Are missing values imputed appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Are categorical variables one-hot encoded?
-- Does the student investigate or manufacture features with linear relationships to the target?
-- Have the data been scaled appropriately?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student utilize feature selection to remove noisy or multi-collinear features?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** linear regression, lasso, and ridge)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Is more than one metric utilized in order to better assess performance?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-In order to pass the project, students must earn a minimum score of 1 for each category.
-- Earning below a 1 in one or more of the above categories would result in a failing project.
-- While a minimum of 1 in each category is the required threshold for graduation, students should aim to earn at least an average of 1.5 across each category. An average score below 1.5, while it may be passing, means students may want to solicit specific feedback in order to significantly improve the project before showcasing it as part of a portfolio or the job search.
-
-### REMEMBER:
-
-This is a learning environment and you are encouraged to try new things, even if they don't work out as well as you planned! While this rubric outlines what we look for in a _good_ project, it is up to you to go above and beyond to create a _great_ project. **Learn from your failures and you'll be prepared to succeed in the workforce**.
+#### Sources
+<br> -[Source: Features to Boost Home Value](#https://www.realtor.com/news/trends/top-15-home-features-to-boost-your-homes-value-and-sell-it-faster/)
+<br> -[Source: Features Buyers Want](#https://www.kiplinger.com/slideshow/real-estate/T010-S001-home-features-today-s-buyers-want-most/index.html)
+<br> -[Source: Remodeling Costs vs Sale](#https://www.remodeling.hw.net/cost-vs-value/2019/west-north-central/)
+<br> -[Source: HoA Window Regulations](#https://ringerwindows.com/residential-windows-hoa-programs/)
+<br> -[Scource: Typical Home Owner](#https://www.zillow.com/report/2017/homeowners/typical-american-homeowner/)
